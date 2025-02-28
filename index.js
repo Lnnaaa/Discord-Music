@@ -1,5 +1,12 @@
 //JotaroKujo0525 note, this is a deed that i should've done a long time ago
-require('dotenv').config()
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => console.log('✅ MongoDB Connected'))
+  .catch(err => console.log(err));
 
 const DiscordMusicBot = require("./lib/DiscordMusicBot");
 const { exec } = require("child_process");

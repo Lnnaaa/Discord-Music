@@ -9,7 +9,7 @@ const command = new SlashCommand()
       embeds: [
         new MessageEmbed()
           .setDescription("🏓 | Fetching ping...")
-          .setColor("#6F8FAF"),
+          .setColor(client.config.embedColor),
       ],
     });
 

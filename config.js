@@ -10,7 +10,7 @@ module.exports = {
   inviteScopes: ["bot", "applications.commands"], // Invite link scopes
   serverDeafen: true, //- If you want bot to stay deafened
   defaultVolume: 100, //- Sets the default volume of the bot, You can change this number anywhere from 1 to 100
-  supportServer: "https://discord.gg/sbySMS7m3v", //- Support Server Link
+  supportServer: "https://saweria.co/zonech", //- Support Server Link
   Issues: "https://github.com/SudhanPlayz/Discord-MusicBot/issues", //- Bug Report Link
   permissions: 277083450689, //- Bot Inviting Permissions
   disconnectTime: 30000, //- How long should the bot wait before disconnecting from the voice channel (in miliseconds). Set to 1 for instant disconnect.
@@ -34,7 +34,7 @@ module.exports = {
       secure: true, //- Can be either true or false. Only use true if ssl is enabled!
     },
   ],
-  embedColor: "#2f3136", //- Color of the embeds, hex supported
+  embedColor: "#7A8AFF", //- Color of the embeds, hex supported
   presence: {
     // PresenceData object | https://discord.js.org/#/docs/main/stable/typedef/PresenceData
     status: "idle", //- You can have online, idle, dnd and invisible (Note: invisible makes people think the bot is offline)
@@ -45,5 +45,5 @@ module.exports = {
       },
     ],
   },
-  iconURL: "", //- This icon will be in every embed's author field
+  iconURL: "interaction.client.user.displayAvatarURL()", //- This icon will be in every embed's author field
 };
