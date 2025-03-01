@@ -1,6 +1,7 @@
 const SlashCommand = require("../../lib/SlashCommand");
 const { MessageEmbed } = require("discord.js");
 const escapeMarkdown = require("discord.js").Util.escapeMarkdown;
+const User = require("../../models/user");
 
 const command = new SlashCommand()
   .setName("play")
@@ -95,6 +96,18 @@ const command = new SlashCommand()
     if (res.loadType === "TRACK_LOADED" || res.loadType === "SEARCH_RESULT") {
       player.queue.add(res.tracks[0]);
 
+      // Update songPlayed pada database
+      try {
+        let userDoc = await User.findOne({ userId: interaction.user.id });
+        if (!userDoc) {
+          userDoc = new User({ userId: interaction.user.id });
+        }
+        // Memanggil method addSongPlay dengan judul lagu
+        await userDoc.addSongPlay(res.tracks[0].title);
+      } catch (err) {
+        console.error("Error updating songsPlayed:", err);
+      }
+
       if (!player.playing && !player.paused && !player.queue.size) {
         player.play();
       }
@@ -147,6 +160,28 @@ const command = new SlashCommand()
 
     if (res.loadType === "PLAYLIST_LOADED") {
       player.queue.add(res.tracks);
+
+      // Update database untuk setiap lagu yang ada di playlist
+      try {
+        let userDoc = await User.findOne({ userId: interaction.user.id });
+        if (!userDoc) {
+          userDoc = new User({ userId: interaction.user.id });
+        }
+        // Perbarui jumlah play untuk setiap lagu
+        for (const track of res.tracks) {
+          if (userDoc.songsPlayed.has(track.title)) {
+            userDoc.songsPlayed.set(
+              track.title,
+              userDoc.songsPlayed.get(track.title) + 1
+            );
+          } else {
+            userDoc.songsPlayed.set(track.title, 1);
+          }
+        }
+        await userDoc.save();
+      } catch (err) {
+        console.error("Error updating songsPlayed for playlist:", err);
+      }
 
       if (
         !player.playing &&

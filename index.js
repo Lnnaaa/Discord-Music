@@ -1,26 +1,30 @@
 //JotaroKujo0525 note, this is a deed that i should've done a long time ago
-const mongoose = require('mongoose');
-require('dotenv').config();
+const mongoose = require("mongoose");
+require("dotenv").config();
+const colors = require("colors");
+let d = new Date();
 
-mongoose.connect(process.env.MONGO_URI, {
+mongoose
+  .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => console.log('✅ MongoDB Connected'))
-  .catch(err => console.log(err));
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log(colors.gray(`[${d.getDate()}:${d.getMonth()}:${d.getFullYear()} - ${d.getHours()}:${d.getMinutes()}]`) + colors.green(" | " + "MongoDB Connected")))
+  .catch((err) => console.log(err));
 
 const DiscordMusicBot = require("./lib/DiscordMusicBot");
 const { exec } = require("child_process");
 
 if (process.env.REPL_ID) {
-	console.log("Replit system detected, initiating special `unhandledRejection` event listener.")
-	process.on('unhandledRejection', (reason, promise) => {
-		promise.catch((err) => {
-			if (err.status === 429) {
-				console.log("something went wrong whilst trying to connect to discord gateway, resetting...");
-				exec("kill 1");
-			}
-		});
-	});
+  console.log("Replit system detected, initiating special `unhandledRejection` event listener.");
+  process.on("unhandledRejection", (reason, promise) => {
+    promise.catch((err) => {
+      if (err.status === 429) {
+        console.log("something went wrong whilst trying to connect to discord gateway, resetting...");
+        exec("kill 1");
+      }
+    });
+  });
 }
 
 const client = new DiscordMusicBot();
@@ -30,5 +34,5 @@ console.log("Make sure to fill in the config.js before starting the bot.");
 const getClient = () => client;
 
 module.exports = {
-	getClient,
+  getClient,
 };

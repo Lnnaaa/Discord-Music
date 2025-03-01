@@ -45,5 +45,5 @@ module.exports = {
       },
     ],
   },
-  iconURL: "interaction.client.user.displayAvatarURL()", //- This icon will be in every embed's author field
+  iconURL: "https://cdn.jsdelivr.net/gh/Lnnaaa/Discord-Music@main/assets/icon.jpg", //- This icon will be in every embed's author field
 };
