@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
     userId: { type: String, required: true, unique: true },
-    username: { type: String, required: true },
+    userDisplayname: { type: String },
     language: { type: String, enum: ["en", "id"], default: "en" },
     xp: { type: Number, default: 0 },
     level: { type: Number, default: 1 },

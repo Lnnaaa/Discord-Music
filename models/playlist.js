@@ -8,7 +8,7 @@ const songSchema = new mongoose.Schema({
 
 const playlistSchema = new mongoose.Schema({
   userId: { type: String, required: true },
-  username: { type: String, required: true },
+  userDisplayname: { type: String, required: true },
   name: { type: String, required: true },
   songs: {
     type: [songSchema],

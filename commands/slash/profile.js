@@ -12,10 +12,10 @@ const command = new SlashCommand()
       await interaction.deferReply();
 
       const userId = interaction.user.id;
-      const username = interaction.user.username;
+      const userDisplayname = interaction.user.displayname;
 
       // ✅ Update atau buat user di database
-      let user = await User.findOneAndUpdate({ userId }, { $setOnInsert: { xp: 0, level: 1 } }, { upsert: true, new: true });
+      let user = await User.findOneAndUpdate({userDisplayname}, { userId }, { $setOnInsert: { xp: 0, level: 1 } }, { upsert: true, new: true });
 
       // ✅ Fetch semua user & urutkan berdasarkan level (Rank)
       const leaderboard = await User.find().sort({ level: -1, xp: -1 }).exec();
