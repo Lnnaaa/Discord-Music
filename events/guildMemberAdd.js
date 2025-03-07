@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const WelcomeChannel = require("../models/GuildChannel");
 
 module.exports = async (client, member) => {
@@ -13,15 +13,15 @@ module.exports = async (client, member) => {
     if (!channel) return;
 
     // Buat embed welcome yang aesthetic
-    const embed = new EmbedBuilder()
+    const embed = new MessageEmbed()
       .setColor(client.config.embedColor)
       .setTitle("🌟 Welcome to the Server! 🌟")
       .setDescription(
         `Hey **${member.user.username}**, Welcome to **${member.guild.name}**! 🎉\n\n` +
-        `> ✨ A new adventure begins, and you're now part of this amazing community!\n` +
-        `> 💬 Don't be shy, say hi and introduce yourself in the chat!\n` +
-        `> 🔎 Check out <#1347273801716465717> to get started and explore the server!\n\n` +
-        `🚀 **Enjoy your stay and have fun!**`
+          `> ✨ A new adventure begins, and you're now part of this amazing community!\n` +
+          `> 💬 Don't be shy, say hi and introduce yourself in the chat!\n` +
+          `> 🔎 Check out <#1347273801716465717> to get started and explore the server!\n\n` +
+          `🚀 **Enjoy your stay and have fun!**`
       )
       .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
       .setImage("https://cdn.jsdelivr.net/gh/Lnnaaa/Discord-Music/welcome.jpg") // Ganti dengan gambar atau banner yang sesuai
