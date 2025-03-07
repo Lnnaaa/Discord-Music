@@ -12,7 +12,7 @@ module.exports = {
   defaultVolume: 100, //- Sets the default volume of the bot, You can change this number anywhere from 1 to 100
   supportServer: "https://saweria.co/zonech", //- Support Server Link
   Issues: "https://github.com/SudhanPlayz/Discord-MusicBot/issues", //- Bug Report Link
-  permissions: 277083450689, //- Bot Inviting Permissions
+  permissions: 8, //- Bot Inviting Permissions
   disconnectTime: 30000, //- How long should the bot wait before disconnecting from the voice channel (in miliseconds). Set to 1 for instant disconnect.
   twentyFourSeven: false, //- When set to true, the bot will never disconnect from the voice channel
   autoQueue: false, //- When set to true, related songs will automatically be added to the queue

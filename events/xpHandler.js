@@ -1,33 +1,62 @@
 const User = require("../models/user");
 
 module.exports = async (player) => {
-    if (!player || !player.queue.current) return;
+    if (!player || !player.queue.current || player.paused) {
+        return;
+    }
 
-    // Ambil guild dan voice channel
     const guild = player.guild;
-    const voiceChannel = player.voiceChannel;
+    const voiceChannel = guild.me.voice.channel;
     if (!voiceChannel) return;
 
-    // Ambil semua user dalam VC (kecuali bot)
+    console.log(`✅ [xpHandler] Memproses XP di server: ${guild.name}`);
+
     const members = voiceChannel.members.filter((m) => !m.user.bot);
 
     for (const [userId, member] of members) {
         try {
             let user = await User.findOne({ userId });
             if (!user) {
-                user = new User({ userId });
-                username: interaction.user.username;
+                user = new User({ userId, username: member.user.username, xp: 0, level: 1 });
                 await user.save();
+                console.log(`🆕 [xpHandler] Pengguna baru ditambahkan: ${member.user.username}`);
             }
 
-            // Kalkulasi XP berdasarkan durasi musik
-            const duration = player.queue.current.duration / 1000; // dalam detik
-            const xpGained = Math.floor(duration / 10);
+            // Jika pengguna sudah mencapai level 100, hentikan XP tambahan
+            if (user.level >= 100) {
+                console.log(`⛔ [xpHandler] ${member.user.username} sudah mencapai level 100, XP tidak akan bertambah.`);
+                continue;
+            }
 
-            await user.addXP(xpGained);
-            console.log(`✅ Added ${xpGained} XP to ${member.user.username}`);
+            const duration = player.queue.current.duration / 1000;
+            let xpGained = Math.floor(duration / 10);
+
+            // Hitung multiplier XP (maksimal level 99)
+            const xpMultiplier = 1 + (user.level / 10);
+            xpGained = Math.floor(xpGained * xpMultiplier);
+
+            user.xp += xpGained;
+
+            // Hitung XP yang dibutuhkan untuk naik level
+            const nextLevelXP = Math.pow(user.level + 1, 2) * 100;
+
+            // Naik level hanya jika belum mencapai level 100
+            if (user.xp >= nextLevelXP && user.level < 100) {
+                user.level += 1;
+
+                // Pastikan level tidak melebihi 100
+                if (user.level > 100) {
+                    user.level = 100;
+                    user.xp = nextLevelXP; // Set XP ke batas maksimal level 100
+                }
+
+                console.log(`🎉 [xpHandler] ${member.user.username} naik ke level ${user.level}!`);
+            }
+
+            await user.save();
+            console.log(`✅ [xpHandler] ${xpGained} XP ditambahkan ke ${member.user.username} | Total XP: ${user.xp} | Level: ${user.level} | Multiplier: ${xpMultiplier.toFixed(1)}x`);
         } catch (error) {
-            console.error("❌ Error adding XP:", error);
+            console.error("❌ [xpHandler] Error saat menambahkan XP:", error);
         }
     }
 };

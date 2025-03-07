@@ -1,4 +1,4 @@
-const { MessageAttachment } = require("discord.js");
+const { MessageAttachment, AttachmentBuilder } = require("discord.js");
 const User = require("../../models/user");
 const SlashCommand = require("../../lib/SlashCommand");
 const { createCanvas, loadImage, registerFont } = require("canvas");
@@ -12,10 +12,10 @@ const command = new SlashCommand()
       await interaction.deferReply();
 
       const userId = interaction.user.id;
-      const userDisplayname = interaction.user.displayname;
+      const userDisplayname = interaction.user.username;
 
       // ✅ Update atau buat user di database
-      let user = await User.findOneAndUpdate({userDisplayname}, { userId }, { $setOnInsert: { xp: 0, level: 1 } }, { upsert: true, new: true });
+      let user = await User.findOneAndUpdate({ userId }, { userDisplayname }, { upsert: true, new: true, setDefaultsOnInsert: true });
 
       // ✅ Fetch semua user & urutkan berdasarkan level (Rank)
       const leaderboard = await User.find().sort({ level: -1, xp: -1 }).exec();
@@ -23,10 +23,10 @@ const command = new SlashCommand()
 
       // ✅ Fetch user untuk memastikan banner bisa diambil
       const userData = await client.users.fetch(userId, { force: true });
-      
+
       // ✅ Ambil banner user (jika ada)
-      let bannerUrl = userData.bannerURL({ format: "png", size: 1024 }) || "https://example.com/default-banner.png";
-      
+      let bannerUrl = userData.bannerURL({ format: "png", size: 1024 }) || "https://cdn.jsdelivr.net/gh/Lnnaaa/Discord-Music/defaultBanner.png";
+
       // ✅ Ambil warna role tertinggi user
       const member = await interaction.guild.members.fetch(userId);
       const highestRole = member.roles.highest;
@@ -64,7 +64,6 @@ const command = new SlashCommand()
       ctx.lineWidth = 5;
       ctx.strokeStyle = xpBarColor;
       ctx.stroke();
-
 
       // ✅ Kalkulasi XP & Level Maksimum
       let xpNeeded = Math.pow(user.level, 2) * 100;

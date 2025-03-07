@@ -1,39 +1,46 @@
 const mongoose = require("mongoose");
+const colors = require("colors");
+
+function logStatus(statusText) {
+    const d = new Date();
+    return colors.gray(`[${d.getDate()}:${d.getMonth() + 1}:${d.getFullYear()} - ${d.getHours()}:${d.getMinutes()}]`) 
+        + colors.green(` | ${statusText}`);
+}
 
 const userSchema = new mongoose.Schema({
     userId: { type: String, required: true, unique: true },
-    userDisplayname: { type: String },
+    userDisplayname: { type: String, default: "Unknown User" },
     language: { type: String, enum: ["en", "id"], default: "en" },
     xp: { type: Number, default: 0 },
     level: { type: Number, default: 1 },
     songsPlayed: {
         type: Map,
         of: Number,
-        default: {}
+        default: new Map()
     }
 });
 
+// 🔹 Fungsi untuk menambahkan XP
 userSchema.methods.addXP = async function (xpGained) {
-    this.xp += xpGained;
 
-    // Cek apakah user naik level
+    this.xp += xpGained;
+    
     const nextLevelXP = Math.pow(this.level, 2) * 100;
     if (this.xp >= nextLevelXP) {
         this.level++;
-        this.xp -= nextLevelXP; // Sisa XP tetap ada
-        console.log(`🎉 User ${this.userId} leveled up to Level ${this.level}!`);
+        this.xp -= nextLevelXP;
+        console.log(logStatus(`🎉${this.userDisplayname} naik ke Level ${this.level}!`));
     }
 
     await this.save();
 };
 
-userSchema.methods.addSongPlay = function (songName) {
-    if (this.songsPlayed.has(songName)) {
-        this.songsPlayed.set(songName, this.songsPlayed.get(songName) + 1);
-    } else {
-        this.songsPlayed.set(songName, 1);
-    }
-    return this.save();
+// 🔹 Fungsi untuk menambahkan jumlah lagu yang dimainkan
+userSchema.methods.addSongPlay = async function (songName) {
+
+    this.songsPlayed.set(songName, (this.songsPlayed.get(songName) || 0) + 1);
+
+    await this.save();
 };
 
 module.exports = mongoose.model("User", userSchema);
