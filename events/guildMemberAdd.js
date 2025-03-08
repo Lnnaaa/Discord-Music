@@ -18,8 +18,6 @@ module.exports = async (client, member) => {
       .setTitle("🌟 Welcome to the Server! 🌟")
       .setDescription(
         `Hey **${member.user.username}**, Welcome to **${member.guild.name}**! 🎉\n\n` +
-          `> ✨ A new adventure begins, and you're now part of this amazing community!\n` +
-          `> 💬 Don't be shy, say hi and introduce yourself in the chat!\n` +
           `> 🔎 Check out <#1347273801716465717> to get started and explore the server!\n\n` +
           `🚀 **Enjoy your stay and have fun!**`
       )
