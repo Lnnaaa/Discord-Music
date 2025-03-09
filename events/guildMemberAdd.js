@@ -22,7 +22,7 @@ module.exports = async (client, member) => {
           `🚀 **Enjoy your stay and have fun!**`
       )
       .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
-      .setImage("https://cdn.jsdelivr.net/gh/Lnnaaa/Discord-Music/welcome.jpg") // Ganti dengan gambar atau banner yang sesuai
+      .setImage("https://cdn.jsdelivr.net/gh/Lnnaaa/Discord-Music/welcome1.jpg") // Ganti dengan gambar atau banner yang sesuai
       .setFooter({
         text: `User #${member.guild.memberCount} joined 🌍`,
         iconURL: member.guild.iconURL({ dynamic: true }),
