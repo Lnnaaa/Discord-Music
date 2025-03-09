@@ -18,6 +18,18 @@ const command = new SlashCommand()
 			.setRequired(false),
 	)
 	.setRun(async (client, interaction, options) => {
+		// 🔹 Cek jika perintah dikirim dari DM
+		if (!interaction.guild) {
+			return interaction.reply({
+			embeds: [
+				new MessageEmbed()
+				.setColor("RED")
+				.setDescription("❌ Slash command tidak dapat digunakan di DM!"),
+			],
+			ephemeral: true, // Hanya user yang bisa melihat pesan ini
+			});
+		}
+		
 		await interaction.reply({
 			embeds: [
 				new MessageEmbed()

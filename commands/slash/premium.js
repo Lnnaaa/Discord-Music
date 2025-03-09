@@ -24,6 +24,18 @@ const command = new SlashCommand()
       .setDescription("Display the premium status for this guild")
   )
   .setRun(async (client, interaction, options) => {
+    // 🔹 Cek jika perintah dikirim dari DM
+    if (!interaction.guild) {
+      return interaction.reply({
+      embeds: [
+        new MessageEmbed()
+        .setColor("RED")
+        .setDescription("❌ Slash command tidak dapat digunakan di DM!"),
+      ],
+      ephemeral: true, // Hanya user yang bisa melihat pesan ini
+      });
+    }
+    
     // Contoh otorisasi: hanya bot owner yang bisa menggunakan perintah ini.
     const botOwnerId = process.env.BOT_OWNER_ID; // Set BOT_OWNER_ID di .env
     if (botOwnerId && interaction.user.id !== botOwnerId) {

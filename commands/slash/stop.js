@@ -6,6 +6,18 @@ const command = new SlashCommand()
 	.setDescription("Stops whatever the bot is playing and leaves the voice channel\n(This command will clear the queue)")
 	
 	.setRun(async (client, interaction, options) => {
+		// 🔹 Cek jika perintah dikirim dari DM
+		if (!interaction.guild) {
+		  return interaction.reply({
+		  embeds: [
+			new MessageEmbed()
+			.setColor("RED")
+			.setDescription("❌ Slash command tidak dapat digunakan di DM!"),
+		  ],
+		  ephemeral: true, // Hanya user yang bisa melihat pesan ini
+		  });
+		}
+		
 		let channel = await client.getChannel(client, interaction);
 		if (!channel) {
 			return;

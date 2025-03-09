@@ -8,6 +8,18 @@ const command = new SlashCommand()
 	.setName("stats")
 	.setDescription("Get information about the bot")
 	.setRun(async (client, interaction) => {
+	  // 🔹 Cek jika perintah dikirim dari DM
+	  if (!interaction.guild) {
+		return interaction.reply({
+		embeds: [
+		  new MessageEmbed()
+		  .setColor("RED")
+		  .setDescription("❌ Slash command tidak dapat digunakan di DM!"),
+		],
+		ephemeral: true, // Hanya user yang bisa melihat pesan ini
+		});
+	  }
+	  
 		// get OS info
 		const osver = os.platform() + " " + os.release();
 		

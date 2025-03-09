@@ -7,6 +7,18 @@ const command = new SlashCommand()
 	.setName("nowplaying")
 	.setDescription("Shows the song currently playing in the voice channel.")
 	.setRun(async (client, interaction, options) => {
+		// 🔹 Cek jika perintah dikirim dari DM
+		if (!interaction.guild) {
+			return interaction.reply({
+			embeds: [
+				new MessageEmbed()
+				.setColor("RED")
+				.setDescription("❌ Slash command tidak dapat digunakan di DM!"),
+			],
+			ephemeral: true, // Hanya user yang bisa melihat pesan ini
+			});
+		}
+		
 		let channel = await client.getChannel(client, interaction);
 		if (!channel) {
 			return;

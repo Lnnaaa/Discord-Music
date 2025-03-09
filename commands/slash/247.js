@@ -6,6 +6,18 @@ const command = new SlashCommand()
 	.setName("247")
 	.setDescription("Prevents the bot from ever disconnecting from a VC (toggle)")
 	.setRun(async (client, interaction, options) => {
+		// 🔹 Cek jika perintah dikirim dari DM
+		if (!interaction.guild) {
+		  return interaction.reply({
+			embeds: [
+			  new MessageEmbed()
+				.setColor("RED")
+				.setDescription("❌ Slash command tidak dapat digunakan di DM!"),
+			],
+			ephemeral: true, // Hanya user yang bisa melihat pesan ini
+		  });
+		}
+		
 		let channel = await client.getChannel(client, interaction);
 		if (!channel) {
 			return;

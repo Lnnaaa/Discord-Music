@@ -7,6 +7,18 @@ const command = new SlashCommand()
   .setDescription("✨ Set the channel for welcome messages!")
   .addChannelOption((option) => option.setName("channel").setDescription("🏠 Select the channel where welcome messages will appear.").setRequired(true))
   .setRun(async (client, interaction) => {
+    // 🔹 Cek jika perintah dikirim dari DM
+    if (!interaction.guild) {
+      return interaction.reply({
+      embeds: [
+        new MessageEmbed()
+        .setColor("RED")
+        .setDescription("❌ Slash command tidak dapat digunakan di DM!"),
+      ],
+      ephemeral: true, // Hanya user yang bisa melihat pesan ini
+      });
+    }
+    
     // Dapatkan channel yang dipilih
     const channel = interaction.options.getChannel("channel");
 
